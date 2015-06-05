@@ -9,7 +9,7 @@ class PostController extends \BaseController {
 	 */
 	public function index()
 	{
-		//
+		return Response::json(Post::get());
 	}
 
 
@@ -31,12 +31,16 @@ class PostController extends \BaseController {
 	 */
 	public function store()
 	{
-		Post::create({
-			'title' => Input::get('title');
-			'content' => Input::get('content');
-		});
+		$post = new Post;
 
-		return Redirect::to('post');
+		$post->title = Input::get('title');
+		$post->content = Input::get('content');
+		$post->tags = Input::get('tags');
+		$post->keywords = Input::get('keywords');
+
+		$post->save();
+
+		return Response::json(array('success' => true));
 	}
 
 
@@ -89,8 +93,9 @@ class PostController extends \BaseController {
 	 */
 	public function destroy($id)
 	{
-		$post = Post::find($id);
-      $post->delete();
+		Post::destroy($id);
+
+		return Response::json(array('success' => true));
 	}
 
 
